@@ -4,533 +4,644 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox Exploit Status</title>
-    <!-- Tailwind CSS CDN -->
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
+            darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#020617',
-                        darkCard: '#0f172a',
-                        lightBg: '#f8fafc',
-                        lightCard: '#ffffff'
+                        darkBg: "#020617",
+                        darkCard: "#0f172a",
+                        lightBg: "#f8fafc",
+                        lightCard: "#ffffff"
                     }
                 }
             }
-        }
+        };
     </script>
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        html { scroll-behavior: smooth; }
+        body { overflow-x: hidden; }
+        .card-hover { transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            border-color: rgba(99,102,241,.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+        }
+        .dark .card-hover:hover { box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+        .chat-scroll::-webkit-scrollbar { width: 6px; }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: rgba(100,116,139,.35);
+            border-radius: 999px;
+        }
+    </style>
 </head>
+
 <body class="bg-lightBg dark:bg-darkBg text-slate-800 dark:text-slate-100 min-h-screen font-sans transition-colors duration-300">
-    <div class="max-w-[1500px] mx-auto px-4 py-8">
-        
-        <!-- Header -->
-        <header class="flex flex-col md:flex-row items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-6 mb-8 gap-4">
-            <div>
-                <div class="flex items-baseline gap-3 mb-2">
-                    <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Roblox Exploit & External Status</h1>
-                    <span class="text-xl font-extrabold text-indigo-500 dark:text-indigo-400 tracking-wide">V beta 0.0.1.5</span>
-                </div>
-                <p class="text-slate-500 dark:text-slate-400 text-sm">Real-time Roblox exploit and external tool status dashboard</p>
+
+<div class="max-w-[1500px] mx-auto px-4 py-8">
+
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row items-center justify-between
+                   border-b border-slate-200 dark:border-slate-800 pb-6 mb-8 gap-4">
+        <div>
+            <div class="flex flex-wrap items-baseline gap-3 mb-2">
+                <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    Roblox Exploit & External Status
+                </h1>
+                <span class="text-xl font-extrabold text-indigo-500 dark:text-indigo-400 tracking-wide">
+                    V beta 0.0.1.5
+                </span>
             </div>
-            <div class="flex items-center gap-3">
-                <div class="flex flex-wrap gap-2">
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-xl text-indigo-600 dark:text-indigo-400 font-semibold text-sm flex items-center gap-2 shadow-sm">
-                        <span>Today's Exploit Updates</span>
-                    </div>
-                </div>
-                <!-- Theme Toggle Button -->
-                <button id="theme-toggle" class="p-3 rounded-xl bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-800 transition-all shadow-sm" aria-label="테마 변경">
-                    <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
-                </button>
-            </div>
-        </header>
-
-        <!-- Main Layout with Sidebar Chat -->
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            
-            <!-- Left Main Content (3 Columns) -->
-            <div class="lg:col-span-3 space-y-8">
-                
-                <!-- Filter Category Buttons Bar -->
-                <div class="flex flex-wrap items-center gap-2.5 bg-white/80 dark:bg-slate-900/80 p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 backdrop-blur shadow-sm">
-                    <button onclick="setFilter('all')" id="btn-all" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-indigo-600 text-white shadow-lg shadow-indigo-600/20">
-                        <span>All</span>
-                    </button>
-                    <button onclick="setFilter('windowsExploits')" id="btn-windowsExploits" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
-                        <span>Windows Exploits</span>
-                    </button>
-                    <button onclick="setFilter('macExploits')" id="btn-macExploits" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
-                        <span>Mac Exploits</span>
-                    </button>
-                    <button onclick="setFilter('androidExploits')" id="btn-androidExploits" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
-                        <span>Android Exploits</span>
-                    </button>
-                    <button onclick="setFilter('iosExploits')" id="btn-iosExploits" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
-                        <span>iOS Exploits</span>
-                    </button>
-                    <button onclick="setFilter('windowsExternals')" id="btn-windowsExternals" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
-                        <span>Windows Externals</span>
-                    </button>
-                </div>
-
-                <!-- Updates Log Section -->
-                <section class="space-y-4">
-                    <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                        <i class="fa-solid fa-bolt text-indigo-500"></i> Exploit & External Update Logs
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-                        <!-- Update Log 1: Madium 2.1.2 -->
-                        <div class="bg-white dark:bg-slate-900 border border-purple-500/30 rounded-xl p-5 relative overflow-hidden flex flex-col justify-between shadow-sm">
-                            <div>
-                                <div class="absolute top-0 right-0 bg-purple-500/10 text-purple-600 dark:text-purple-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-purple-500/20">
-                                    EXPLOIT UPDATE
-                                </div>
-                                <h3 class="text-purple-600 dark:text-purple-400 font-bold text-sm mb-2 flex items-center gap-1.5">
-                                    <span>An exploit update has been detected!</span>
-                                </h3>
-                                <p class="text-slate-900 dark:text-white font-semibold text-base mb-3">Madium has been updated for Windows!</p>
-                                <div class="space-y-1.5 text-xs text-slate-600 dark:text-slate-300 font-mono bg-slate-100 dark:bg-slate-950 p-3 rounded-lg border border-slate-200 dark:border-slate-800 mb-3">
-                                    <div><span class="text-slate-400 dark:text-slate-500">New Version:</span> <strong class="text-slate-900 dark:text-white">2.1.2</strong></div>
-                                    <div><span class="text-slate-400 dark:text-slate-500">Roblox Version:</span> <strong class="text-slate-900 dark:text-white">version-e7d81637d42c4b23</strong></div>
-                                    <div><span class="text-slate-400 dark:text-slate-500">Date:</span> <span class="text-slate-500 dark:text-slate-400">Sep 6, 2026, 3:30 AM UTC</span></div>
-                                </div>
-                                <div class="text-xs text-slate-600 dark:text-slate-300 space-y-2 font-mono bg-slate-100 dark:bg-slate-950/60 p-3 rounded-lg border border-slate-200 dark:border-slate-800/60 max-h-48 overflow-y-auto">
-                                    <div class="text-indigo-600 dark:text-indigo-400 font-bold">Changelog:</div>
-                                    <p class="text-[11px] text-slate-600 dark:text-slate-300">Yo Lxzp never let me update again yo</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Update Log 2: Madium 2.1.3 -->
-                        <div class="bg-white dark:bg-slate-900 border border-purple-500/30 rounded-xl p-5 relative overflow-hidden flex flex-col justify-between shadow-sm">
-                            <div>
-                                <div class="absolute top-0 right-0 bg-purple-500/10 text-purple-600 dark:text-purple-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-purple-500/20">
-                                    EXPLOIT UPDATE
-                                </div>
-                                <h3 class="text-purple-600 dark:text-purple-400 font-bold text-sm mb-2 flex items-center gap-1.5">
-                                    <span>An exploit update has been detected!</span>
-                                </h3>
-                                <p class="text-slate-900 dark:text-white font-semibold text-base mb-3">Madium has been updated for Windows!</p>
-                                <div class="space-y-1.5 text-xs text-slate-600 dark:text-slate-300 font-mono bg-slate-100 dark:bg-slate-950 p-3 rounded-lg border border-slate-200 dark:border-slate-800 mb-3">
-                                    <div><span class="text-slate-400 dark:text-slate-500">New Version:</span> <strong class="text-slate-900 dark:text-white">2.1.3</strong></div>
-                                    <div><span class="text-slate-400 dark:text-slate-500">Roblox Version:</span> <strong class="text-slate-900 dark:text-white">version-e7d81637d42c4b23</strong></div>
-                                    <div><span class="text-slate-400 dark:text-slate-500">Date:</span> <span class="text-slate-500 dark:text-slate-400">Sep 6, 2026, 6:43 PM UTC</span></div>
-                                </div>
-                                <div class="text-xs text-slate-600 dark:text-slate-300 space-y-2 font-mono bg-slate-100 dark:bg-slate-950/60 p-3 rounded-lg border border-slate-200 dark:border-slate-800/60 max-h-48 overflow-y-auto">
-                                    <div class="text-indigo-600 dark:text-indigo-400 font-bold">Changelog:</div>
-                                    <p class="text-[11px] text-slate-600 dark:text-slate-300">Fixed websocket connect on the sunc test making madium 100% Sunc</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Update Log 3: Real 2.5.0 -->
-                        <div class="bg-white dark:bg-slate-900 border border-purple-500/30 rounded-xl p-5 relative overflow-hidden flex flex-col justify-between shadow-sm">
-                            <div>
-                                <div class="absolute top-0 right-0 bg-purple-500/10 text-purple-600 dark:text-purple-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-purple-500/20">
-                                    EXPLOIT UPDATE
-                                </div>
-                                <h3 class="text-purple-600 dark:text-purple-400 font-bold text-sm mb-2 flex items-center gap-1.5">
-                                    <span>An exploit update has been detected!</span>
-                                </h3>
-                                <p class="text-slate-900 dark:text-white font-semibold text-base mb-3">Real has been updated for Windows!</p>
-                                <div class="space-y-1.5 text-xs text-slate-600 dark:text-slate-300 font-mono bg-slate-100 dark:bg-slate-950 p-3 rounded-lg border border-slate-200 dark:border-slate-800 mb-3">
-                                    <div><span class="text-slate-400 dark:text-slate-500">New Version:</span> <strong class="text-slate-900 dark:text-white">2.5.0</strong></div>
-                                    <div><span class="text-slate-400 dark:text-slate-500">Roblox Version:</span> <strong class="text-slate-900 dark:text-white">version-e7d81637d42c4b23</strong></div>
-                                    <div><span class="text-slate-400 dark:text-slate-500">Date:</span> <span class="text-slate-500 dark:text-slate-400">Sep 6, 2026, 6:46 PM UTC</span></div>
-                                </div>
-                                <div class="text-xs text-slate-600 dark:text-slate-300 space-y-2 font-mono bg-slate-100 dark:bg-slate-950/60 p-3 rounded-lg border border-slate-200 dark:border-slate-800/60 max-h-48 overflow-y-auto">
-                                    <div class="text-indigo-600 dark:text-indigo-400 font-bold">Changelog:</div>
-                                    <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-600 dark:text-slate-300 pl-1">
-                                        <li>Added isluau</li>
-                                        <li>gethiddenproperty now handles all write-only cases and fixed specific crashes</li>
-                                        <li>Fixed sethiddenproperty crashing for sharedstring</li>
-                                        <li>Fixed getdeletedactors returning threads instead of actors</li>
-                                        <li>Fixed injection exit code (STATUS_ACCESS_VIOLATION) for people with a broken windows installation</li>
-                                    </ul>
-                                    <div class="text-indigo-500 font-bold pt-1">UI:</div>
-                                    <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-600 dark:text-slate-300 pl-1">
-                                        <li>Fixed Multi Roblox</li>
-                                        <li>Added new Themes: Roblox (2008), Vaehz, WEAO, Voxlis, Inject.Today, Pulsery, Rscripts, ScriptBlox, Roblox Scripts, HaxHell, Roblox Offsets, V3rm</li>
-                                        <li>Fixed some login issues</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Update Log 4: Synapse Z 1.0.3.6 -->
-                        <div class="bg-white dark:bg-slate-900 border border-purple-500/30 rounded-xl p-5 relative overflow-hidden flex flex-col justify-between shadow-sm">
-                            <div>
-                                <div class="absolute top-0 right-0 bg-purple-500/10 text-purple-600 dark:text-purple-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-purple-500/20">
-                                    EXPLOIT UPDATE
-                                </div>
-                                <h3 class="text-purple-600 dark:text-purple-400 font-bold text-sm mb-2 flex items-center gap-1.5">
-                                    <span>An exploit update has been detected!</span>
-                                </h3>
-                                <p class="text-slate-900 dark:text-white font-semibold text-base mb-3">Synapse Z has been updated for Windows!</p>
-                                <div class="space-y-1.5 text-xs text-slate-600 dark:text-slate-300 font-mono bg-slate-100 dark:bg-slate-950 p-3 rounded-lg border border-slate-200 dark:border-slate-800 mb-3">
-                                    <div><span class="text-slate-400 dark:text-slate-500">New Version:</span> <strong class="text-slate-900 dark:text-white">1.0.3.6</strong></div>
-                                    <div><span class="text-slate-400 dark:text-slate-500">Roblox Version:</span> <strong class="text-slate-900 dark:text-white">version-e7d81637d42c4b23</strong></div>
-                                    <div><span class="text-slate-400 dark:text-slate-500">Date:</span> <span class="text-slate-500 dark:text-slate-400">Sep 6, 2026, 7:17 PM UTC</span></div>
-                                </div>
-                                <div class="text-xs text-slate-600 dark:text-slate-300 space-y-2 font-mono bg-slate-100 dark:bg-slate-950/60 p-3 rounded-lg border border-slate-200 dark:border-slate-800/60 max-h-48 overflow-y-auto">
-                                    <div class="text-indigo-600 dark:text-indigo-400 font-bold">Changelog:</div>
-                                    <ul class="list-none space-y-1 text-[11px] text-slate-600 dark:text-slate-300">
-                                        <li>real (real) synapse z update</li>
-                                        <li>#spiderman #polyester</li>
-                                        <li>+ reduced unc, sunc & myriad</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Update Log 5: Real 2.5.1 -->
-                        <div class="bg-white dark:bg-slate-900 border border-purple-500/30 rounded-xl p-5 relative overflow-hidden flex flex-col justify-between shadow-sm">
-                            <div>
-                                <div class="absolute top-0 right-0 bg-purple-500/10 text-purple-600 dark:text-purple-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-purple-500/20">
-                                    EXPLOIT UPDATE
-                                </div>
-                                <h3 class="text-purple-600 dark:text-purple-400 font-bold text-sm mb-2 flex items-center gap-1.5">
-                                    <span>An exploit update has been detected!</span>
-                                </h3>
-                                <p class="text-slate-900 dark:text-white font-semibold text-base mb-3">Real has been updated for Windows!</p>
-                                <div class="space-y-1.5 text-xs text-slate-600 dark:text-slate-300 font-mono bg-slate-100 dark:bg-slate-950 p-3 rounded-lg border border-slate-200 dark:border-slate-800 mb-3">
-                                    <div><span class="text-slate-400 dark:text-slate-500">New Version:</span> <strong class="text-slate-900 dark:text-white">2.5.1</strong></div>
-                                    <div><span class="text-slate-400 dark:text-slate-500">Roblox Version:</span> <strong class="text-slate-900 dark:text-white">version-e7d81637d42c4b23</strong></div>
-                                    <div><span class="text-slate-400 dark:text-slate-500">Date:</span> <span class="text-slate-500 dark:text-slate-400">Sep 6, 2026, 8:09 PM UTC</span></div>
-                                </div>
-                                <div class="text-xs text-slate-600 dark:text-slate-300 space-y-2 font-mono bg-slate-100 dark:bg-slate-950/60 p-3 rounded-lg border border-slate-200 dark:border-slate-800/60 max-h-48 overflow-y-auto">
-                                    <div class="text-indigo-600 dark:text-indigo-400 font-bold">Changelog:</div>
-                                    <p class="text-[11px] text-slate-600 dark:text-slate-300">Fix browser login transport resilience</p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </section>
-
-                <!-- Exploits & Externals Sections -->
-                <div class="space-y-10">
-                    <!-- Windows Exploits -->
-                    <section id="sec-windowsExploits">
-                        <h2 class="text-xl font-semibold text-emerald-600 dark:text-emerald-400 mb-4 flex items-center gap-2">
-                            <span>Windows Exploits</span>
-                        </h2>
-                        <div id="windows-exploits" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
-                    </section>
-                    <!-- Mac Exploits -->
-                    <section id="sec-macExploits">
-                        <h2 class="text-xl font-semibold text-sky-600 dark:text-sky-400 mb-4 flex items-center gap-2">
-                            <span>Mac Exploits</span>
-                        </h2>
-                        <div id="mac-exploits" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
-                    </section>
-                    <!-- Android Exploits -->
-                    <section id="sec-androidExploits">
-                        <h2 class="text-xl font-semibold text-amber-600 dark:text-amber-400 mb-4 flex items-center gap-2">
-                            <span>Android Exploits</span>
-                        </h2>
-                        <div id="android-exploits" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
-                    </section>
-                    <!-- iOS Exploits -->
-                    <section id="sec-iosExploits">
-                        <h2 class="text-xl font-semibold text-pink-600 dark:text-pink-400 mb-4 flex items-center gap-2">
-                            <span>iOS Exploits</span>
-                        </h2>
-                        <div id="ios-exploits" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
-                    </section>
-                    <!-- Windows Externals -->
-                    <section id="sec-windowsExternals">
-                        <h2 class="text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4 flex items-center gap-2">
-                            <span>Windows Externals</span>
-                        </h2>
-                        <div id="windows-externals" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
-                    </section>
-                </div>
-            </div>
-
-            <!-- Right Sidebar: Live Chat -->
-            <aside class="lg:col-span-1">
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sticky top-6 flex flex-col h-[750px] shadow-xl">
-                    
-                    <!-- Chat Header -->
-                    <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 mb-3">
-                        <div>
-                            <h2 class="text-base font-bold text-slate-900 dark:text-white">Live Chat</h2>
-                            <p class="text-xs text-indigo-600 dark:text-indigo-400 font-medium">HUB Lounge</p>
-                        </div>
-                        <span class="text-xs text-emerald-600 dark:text-emerald-400 font-medium cursor-pointer hover:underline">Connected</span>
-                    </div>
-
-                    <!-- Online Status & Count Bar -->
-                    <div class="flex items-center justify-between bg-slate-100 dark:bg-slate-950 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 mb-3 text-xs">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span class="text-slate-700 dark:text-slate-300">Online</span>
-                        </div>
-                        <span id="online-count" class="font-bold text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded-full">1</span>
-                    </div>
-
-                    <!-- Chat Messages List -->
-                    <div id="chat-messages" class="flex-1 overflow-y-auto space-y-2.5 pr-1 mb-3 scrollbar-thin flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 text-xs">
-                        <p>No messages yet.</p>
-                        <p class="text-[11px]">Be the first to send a message!</p>
-                    </div>
-
-                    <!-- Chat Input Area -->
-                    <div class="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
-                        <input type="text" id="chat-nickname" placeholder="Nickname (Default: Anonymous)" maxlength="15" class="w-full bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500">
-                        <div class="flex gap-2">
-                            <input type="text" id="chat-input" placeholder="Message (Max 100 chars)" maxlength="100" class="flex-1 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500" onkeydown="if(event.key==='Enter') sendMessage()">
-                            <button onclick="sendMessage()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2 rounded-xl text-xs transition cursor-pointer">Send</button>
-                        </div>
-                    </div>
-                </div>
-            </aside>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">
+                Real-time Roblox exploit and external tool status dashboard
+            </p>
         </div>
 
-        <!-- Footer -->
-        <footer class="text-center text-slate-500 dark:text-slate-600 text-xs mt-16 border-t border-slate-200 dark:border-slate-900 pt-6">
-            &copy; Roblox Exploit Status Dashboard. Powered by WEAO, The #1 Roblox exploit status tracker
-        </footer>
+        <div class="flex items-center gap-3">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800
+                        px-4 py-2 rounded-xl text-indigo-600 dark:text-indigo-400
+                        font-semibold text-sm flex items-center gap-2 shadow-sm">
+                <span>Today's Exploit Updates</span>
+            </div>
+
+            <button id="theme-toggle"
+                    class="p-3 rounded-xl bg-slate-200 dark:bg-slate-900
+                           border border-slate-300 dark:border-slate-800
+                           text-slate-700 dark:text-slate-200
+                           hover:bg-slate-300 dark:hover:bg-slate-800 transition-all shadow-sm"
+                    aria-label="테마 변경"
+                    title="테마 변경">
+                <i id="theme-icon" class="fa-solid fa-sun text-lg"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+        <!-- Main -->
+        <main class="lg:col-span-3 space-y-8">
+
+            <!-- Filters -->
+            <div class="flex flex-wrap items-center gap-2.5
+                        bg-white/80 dark:bg-slate-900/80 p-2.5 rounded-2xl
+                        border border-slate-200 dark:border-slate-800 backdrop-blur shadow-sm">
+
+                <button data-filter="all" class="filter-btn active-filter px-4 py-2 rounded-xl text-xs font-bold transition">
+                    All
+                </button>
+                <button data-filter="windowsExploits" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition">
+                    Windows Exploits
+                </button>
+                <button data-filter="macExploits" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition">
+                    Mac Exploits
+                </button>
+                <button data-filter="androidExploits" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition">
+                    Android Exploits
+                </button>
+                <button data-filter="iosExploits" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition">
+                    iOS Exploits
+                </button>
+                <button data-filter="windowsExternals" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition">
+                    Windows Externals
+                </button>
+            </div>
+
+            <!-- Update Logs -->
+            <section class="space-y-4">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-indigo-500"></i>
+                    Exploit & External Update Logs
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                    <div class="update-card">
+                        <h3>Madium has been updated for Windows!</h3>
+                        <p><b>Version:</b> 2.1.2</p>
+                        <p><b>Roblox Version:</b> version-e7d81637d42c4b23</p>
+                        <p><b>Date:</b> Sep 6, 2026, 3:30 AM UTC</p>
+                        <div class="changelog">Yo Lxzp never let me update again yo</div>
+                    </div>
+
+                    <div class="update-card">
+                        <h3>Madium has been updated for Windows!</h3>
+                        <p><b>Version:</b> 2.1.3</p>
+                        <p><b>Roblox Version:</b> version-e7d81637d42c4b23</p>
+                        <p><b>Date:</b> Sep 6, 2026, 6:43 PM UTC</p>
+                        <div class="changelog">Fixed websocket connect on the sunc test making madium 100% Sunc</div>
+                    </div>
+
+                    <div class="update-card">
+                        <h3>Real has been updated for Windows!</h3>
+                        <p><b>Version:</b> 2.5.0</p>
+                        <p><b>Roblox Version:</b> version-e7d81637d42c4b23</p>
+                        <p><b>Date:</b> Sep 6, 2026, 6:46 PM UTC</p>
+                        <div class="changelog">
+                            Added isluau<br>
+                            gethiddenproperty now handles all write-only cases and fixed specific crashes<br>
+                            Fixed sethiddenproperty crashing for sharedstring<br>
+                            Fixed getdeletedactors returning threads instead of actors<br>
+                            Fixed injection exit code (STATUS_ACCESS_VIOLATION)
+                        </div>
+                    </div>
+
+                    <div class="update-card">
+                        <h3>Synapse Z has been updated for Windows!</h3>
+                        <p><b>Version:</b> 1.0.3.6</p>
+                        <p><b>Roblox Version:</b> version-e7d81637d42c4b23</p>
+                        <p><b>Date:</b> Sep 6, 2026, 7:17 PM UTC</p>
+                        <div class="changelog">
+                            real (real) synapse z update<br>
+                            #spiderman #polyester<br>
+                            + reduced unc, sunc & myriad
+                        </div>
+                    </div>
+
+                    <div class="update-card">
+                        <h3>Real has been updated for Windows!</h3>
+                        <p><b>Version:</b> 2.5.1</p>
+                        <p><b>Roblox Version:</b> version-e7d81637d42c4b23</p>
+                        <p><b>Date:</b> Sep 6, 2026, 8:09 PM UTC</p>
+                        <div class="changelog">Fix browser login transport resilience</div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Status Sections -->
+            <div class="space-y-10">
+                <section id="sec-windowsExploits">
+                    <h2 class="section-title text-emerald-600 dark:text-emerald-400">Windows Exploits</h2>
+                    <div id="windows-exploits" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+                </section>
+
+                <section id="sec-macExploits">
+                    <h2 class="section-title text-sky-600 dark:text-sky-400">Mac Exploits</h2>
+                    <div id="mac-exploits" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+                </section>
+
+                <section id="sec-androidExploits">
+                    <h2 class="section-title text-amber-600 dark:text-amber-400">Android Exploits</h2>
+                    <div id="android-exploits" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+                </section>
+
+                <section id="sec-iosExploits">
+                    <h2 class="section-title text-pink-600 dark:text-pink-400">iOS Exploits</h2>
+                    <div id="ios-exploits" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+                </section>
+
+                <section id="sec-windowsExternals">
+                    <h2 class="section-title text-purple-600 dark:text-purple-400">Windows Externals</h2>
+                    <div id="windows-externals" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Chat -->
+        <aside class="lg:col-span-1">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800
+                        rounded-2xl p-4 sticky top-6 flex flex-col h-[750px] shadow-xl">
+
+                <div class="flex items-center justify-between pb-3 border-b
+                            border-slate-200 dark:border-slate-800 mb-3">
+                    <div>
+                        <h2 class="text-base font-bold text-slate-900 dark:text-white">Live Chat</h2>
+                        <p class="text-xs text-indigo-600 dark:text-indigo-400 font-medium">HUB Lounge</p>
+                    </div>
+                    <span class="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                        Connected
+                    </span>
+                </div>
+
+                <div class="flex items-center justify-between bg-slate-100 dark:bg-slate-950
+                            px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800
+                            mb-3 text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="text-slate-700 dark:text-slate-300">Online</span>
+                    </div>
+                    <span id="online-count"
+                          class="font-bold text-slate-900 dark:text-white
+                                 bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded-full">1</span>
+                </div>
+
+                <div id="chat-messages"
+                     class="flex-1 overflow-y-auto space-y-2.5 pr-1 mb-3 chat-scroll"></div>
+
+                <div class="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
+                    <input type="text" id="chat-nickname"
+                           placeholder="Nickname (Default: Anonymous)"
+                           maxlength="15"
+                           class="w-full bg-slate-100 dark:bg-slate-950 border
+                                  border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2
+                                  text-xs text-slate-900 dark:text-white
+                                  placeholder-slate-400 dark:placeholder-slate-500
+                                  focus:outline-none focus:border-indigo-500">
+
+                    <div class="flex gap-2">
+                        <input type="text" id="chat-input"
+                               placeholder="Message (Max 100 chars)"
+                               maxlength="100"
+                               class="flex-1 bg-slate-100 dark:bg-slate-950 border
+                                      border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2
+                                      text-xs text-slate-900 dark:text-white
+                                      placeholder-slate-400 dark:placeholder-slate-500
+                                      focus:outline-none focus:border-indigo-500">
+
+                        <button id="send-btn"
+                                class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold
+                                       px-4 py-2 rounded-xl text-xs transition">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
     </div>
 
-    <script>
-        // Theme Toggle Logic
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        const htmlElement = document.documentElement;
+    <footer class="text-center text-slate-500 dark:text-slate-600 text-xs mt-16
+                   border-t border-slate-200 dark:border-slate-900 pt-6">
+        &copy; Roblox Exploit Status Dashboard.
+        Powered by WEAO, The #1 Roblox exploit status tracker
+    </footer>
+</div>
 
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            htmlElement.classList.add('dark');
-            themeIcon.className = "fa-solid fa-sun text-lg";
-        } else {
-            htmlElement.classList.remove('dark');
-            themeIcon.className = "fa-solid fa-moon text-lg";
+<script>
+"use strict";
+
+/* -----------------------------
+   Data
+----------------------------- */
+const data = {
+    windowsExploits: [
+        { name:"Volt", version:"1.3.11.2", status:"working", link:"https://bitbyform.mysellauth.com", unc:"99%", sunc:"100%", price:"Paid", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Potassium", version:"2.4.8", status:"working", link:"https://bitbyform.mysellauth.com", unc:"99%", sunc:"100%", price:"Paid", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Wave", version:"NEW-1.5.2", status:"working", link:"https://bitbyform.mysellauth.com", unc:"99%", sunc:"100%", price:"Paid", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Xeno", version:"1.3.60", status:"working", link:"https://www.xeno.now", unc:"84%", sunc:"40%", price:"Free", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Solara", version:"0.1.7", status:"working", link:"https://getsolara.dev", unc:"66%", sunc:"59%", price:"Free", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Madium", version:"2.1.8", status:"working", link:"https://getmadium.net", unc:"98%", sunc:"100%", price:"Free", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"SirHurt", version:"V5.468", status:"working", link:"https://bitbyform.mysellauth.com", unc:"99%", sunc:"100%", price:"Paid", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Real", version:"2.6.0", status:"working", link:"https://projectreal.gg", unc:"99%", sunc:"100%", price:"Free", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Isaeva", version:"2.3.2", status:"working", link:"https://bitbyform.mysellauth.com", unc:"99%", sunc:"100%", price:"Paid", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Cosmic", version:"1.733", status:"down", link:"https://bitbyform.mysellauth.com", platform:"Windows", robloxVer:"version-e7d81637d42c4b23" },
+        { name:"Velocity", version:"1.3.9", status:"down", link:"https://realvelocity.xyz/", unc:"99%", sunc:"100%", price:"Free", platform:"Windows", robloxVer:"version-e7d81637d42c4b23" },
+        { name:"Volcano", version:"v3.2.5.1", status:"down", link:"#", platform:"Windows", robloxVer:"version-e7d81637d42c4b23" },
+        { name:"Synapse Z", version:"1.0.3.6", status:"down", link:"https://bitbyform.mysellauth.com", unc:"99%", sunc:"98%", price:"Paid", platform:"Windows", robloxVer:"version-e7d81637d42c4b23" },
+        { name:"Seliware", version:"2.4.9", status:"down", link:"https://bitbyform.mysellauth.com", unc:"99%", sunc:"98%", price:"Paid", platform:"Windows", robloxVer:"version-e7d81637d42c4b23" }
+    ],
+
+    macExploits: [
+        { name:"MacSploit", version:"736.1", status:"down", link:"https://bitbyform.mysellauth.com", unc:"99%", sunc:"100%", price:"Paid", platform:"Mac", robloxVer:"version-4c4fc877ca9b4c61" },
+        { name:"Opiumware", version:"v2.5.1-a", status:"down", link:"https://use.opiumware.today", unc:"99%", sunc:"100%", price:"Free", platform:"Mac", robloxVer:"version-2a3a7efa1a934799" }
+    ],
+
+    androidExploits: [
+        { name:"Delta", version:"2.729.840", status:"working", link:"https://deltaexploits.gg", unc:"99%", sunc:"100%", price:"Free", platform:"Android", robloxVer:"2.729.840" },
+        { name:"Vega X", version:"2.734.917", status:"down", link:"https://www.vegax.gg", unc:"98%", sunc:"98%", price:"Free", platform:"Android", robloxVer:"2.734.917" },
+        { name:"Codex", version:"2.731.944", status:"down", link:"https://codex.lol", unc:"98%", sunc:"96%", price:"Free", platform:"Android", robloxVer:"2.731.944" }
+    ],
+
+    iosExploits: [
+        { name:"Delta", version:"2.729.838", status:"working", link:"https://deltaexploits.gg", unc:"99%", sunc:"98%", price:"Free", platform:"iOS", robloxVer:"2.729.838" }
+    ],
+
+    windowsExternals: [
+        { name:"Matcha", version:"v2", status:"working", link:"https://bitbyform.mysellauth.com", unc:"0%", sunc:"0%", price:"Paid", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Madius", version:"1.11.0-beta", status:"working", link:"https://madius.dev", unc:"0%", sunc:"0%", price:"Free", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Severe", version:"v2", status:"working", link:"https://bitbyform.mysellauth.com", unc:"0%", sunc:"0%", price:"Paid", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Lumen", version:"1.0.9", status:"working", link:"https://bitbyform.mysellauth.com", unc:"0%", sunc:"0%", price:"Paid", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Matrix Hub", version:"v2", status:"working", link:"https://bitbyform.mysellauth.com", unc:"0%", sunc:"0%", price:"Paid", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Photon", version:"6.8", status:"working", link:"https://bitbyform.mysellauth.com", unc:"0%", sunc:"0%", price:"Paid", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Axis", version:"0.4.5-04ccd36d694eb92d", status:"working", link:"https://bitbyform.mysellauth.com", unc:"0%", sunc:"0%", price:"Paid", platform:"Windows", robloxVer:"version-c5aecda2245e4fae" },
+        { name:"Melatonin", version:"1.4.4l", status:"down", link:"#", unc:"0%", sunc:"0%", price:"Paid", platform:"Windows", robloxVer:"version-e7d81637d42c4b23" },
+        { name:"Ronin", version:"Version-4.1.9", status:"down", link:"#", unc:"0%", sunc:"0%", price:"Paid", platform:"Windows", robloxVer:"version-ddf602d9cfe44005" },
+        { name:"Serotonin", version:"v2", status:"down", link:"https://bitbyform.mysellauth.com", unc:"0%", sunc:"0%", price:"Paid", platform:"Windows", robloxVer:"version-e7d81637d42c4b23" },
+        { name:"DX9WARE V2", version:"1.1.218", status:"down", link:"https://bitbyform.mysellauth.com", unc:"0%", sunc:"0%", price:"Paid", platform:"Windows", robloxVer:"version-e7d81637d42c4b23" }
+    ]
+};
+
+/* -----------------------------
+   Helpers
+----------------------------- */
+const escapeHTML = value => String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+const forbiddenWords = [
+    "게이", "니엄마", "느금마", "병신", "새끼",
+    "개새끼", "시병", "ㅅㅂ", "ㅂㅅ", "히틀러", "시발"
+];
+
+function filterMessage(text) {
+    const lower = text.toLowerCase();
+    return forbiddenWords.some(word => lower.includes(word.toLowerCase()))
+        ? "####검열됨####"
+        : text;
+}
+
+/* -----------------------------
+   Theme
+----------------------------- */
+const themeToggleBtn = document.getElementById("theme-toggle");
+const themeIcon = document.getElementById("theme-icon");
+const htmlElement = document.documentElement;
+
+function applyTheme(theme) {
+    const dark = theme === "dark";
+    htmlElement.classList.toggle("dark", dark);
+    themeIcon.className = dark
+        ? "fa-solid fa-sun text-lg"
+        : "fa-solid fa-moon text-lg";
+}
+
+const savedTheme = localStorage.getItem("theme");
+applyTheme(
+    savedTheme ||
+    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+);
+
+themeToggleBtn.addEventListener("click", () => {
+    const nextTheme = htmlElement.classList.contains("dark") ? "light" : "dark";
+    localStorage.setItem("theme", nextTheme);
+    applyTheme(nextTheme);
+});
+
+/* -----------------------------
+   Filters
+----------------------------- */
+const sections = [
+    "windowsExploits",
+    "macExploits",
+    "androidExploits",
+    "iosExploits",
+    "windowsExternals"
+];
+
+function updateFilterButtons(activeKey) {
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.className =
+            "filter-btn px-4 py-2 rounded-xl text-xs font-bold transition " +
+            "bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 " +
+            "hover:text-slate-900 dark:hover:text-white " +
+            "border border-slate-200 dark:border-slate-800";
+
+        if (btn.dataset.filter === activeKey) {
+            btn.className =
+                "filter-btn active-filter px-4 py-2 rounded-xl text-xs font-bold transition " +
+                "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20";
         }
+    });
+}
 
-        themeToggleBtn.addEventListener('click', () => {
-            if (htmlElement.classList.contains('dark')) {
-                htmlElement.classList.remove('dark');
-                localStorage.theme = 'light';
-                themeIcon.className = "fa-solid fa-moon text-lg";
-            } else {
-                htmlElement.classList.add('dark');
-                localStorage.theme = 'dark';
-                themeIcon.className = "fa-solid fa-sun text-lg";
-            }
-        });
+function setFilter(filterKey) {
+    updateFilterButtons(filterKey);
 
-        const data = {
-            windowsExploits: [
-                { name: "Volt", version: "1.3.11.2", status: "working", link: "https://bitbyform.mysellauth.com", unc: "99%", sunc: "100%", price: "Paid", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Potassium", version: "2.4.8", status: "working", link: "https://bitbyform.mysellauth.com", unc: "99%", sunc: "100%", price: "Paid", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Wave", version: "NEW-1.5.2", status: "working", link: "https://bitbyform.mysellauth.com", unc: "99%", sunc: "100%", price: "Paid", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Xeno", version: "1.3.60", status: "working", link: "https://www.xeno.now", unc: "84%", sunc: "40%", price: "Free", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" }
-                { name: "Solara", version: "0.1.7", status: "working", link: "https://getsolara.dev", unc: "66%", sunc: "59%", price: "Free", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Madium", version: "2.1.8", status: "working", link: "https://getmadium.net", unc: "98%", sunc: "100%", price: "Free", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "SirHurt", version: "V5.468", status: "working", link: "https://bitbyform.mysellauth.com", unc: "99%", sunc: "100%", price: "Paid", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Real", version: "2.6.0", status: "working", link: "https://projectreal.gg", unc: "99%", sunc: "100%", price: "Free", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Isaeva", version: "2.3.2", status: "working", link: "https://bitbyform.mysellauth.com", unc: "99%", sunc: "100%", price: "Paid", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Cosmic", version: "1.733", status: "down", link: "https://bitbyform.mysellauth.com", platform: "Windows", robloxVer: "version-e7d81637d42c4b23" },
-                { name: "Velocity", version: "1.3.9", status: "down", link: "https://realvelocity.xyz/", unc: "99%", sunc: "100%", price: "Free", platform: "Windows", robloxVer: "version-e7d81637d42c4b23" },
-                { name: "Volcano", version: "v3.2.5.1", status: "down", link: "#", platform: "Windows", robloxVer: "version-e7d81637d42c4b23" },
-                { name: "Synapse Z", version: "1.0.3.6", status: "down", link: "https://bitbyform.mysellauth.com", unc: "99%", sunc: "98%", price: "Paid", platform: "Windows", robloxVer: "version-e7d81637d42c4b23" },
-               
-               
-                { name: "Seliware", version: "2.4.9", status: "down", link: "https://bitbyform.mysellauth.com", unc: "99%", sunc: "98%", price: "Paid", platform: "Windows", robloxVer: "version-e7d81637d42c4b23" },
-                { name: "Synapse Z", version: "1.0.3.6", status: "down", link: "https://bitbyform.mysellauth.com", unc: "99%", sunc: "98%", price: "Paid", platform: "Windows", robloxVer: "version-e7d81637d42c4b23" },
-            ],
-            macExploits: [
-                { name: "MacSploit", version: "736.1", status: "down", link: "https://bitbyform.mysellauth.com", unc: "99%", sunc: "100%", price: "Paid", platform: "Mac", robloxVer: "version-4c4fc877ca9b4c61" },
-                { name: "Opiumware", version: "v2.5.1-a", status: "down", link: "https://use.opiumware.today", unc: "99%", sunc: "100%", price: "Free", platform: "Mac", robloxVer: "version-2a3a7efa1a934799" }
-            ],
-            androidExploits: [
-                { name: "Delta", version: "2.729.840", status: "working", link: "https://deltaexploits.gg", unc: "99%", sunc: "100%", price: "Free", platform: "Android", robloxVer: "2.729.840" }
-                { name: "Vega X", version: "2.734.917", status: "down", link: "https://www.vegax.gg", unc: "98%", sunc: "98%", price: "Free", platform: "Android", robloxVer: "2.734.917" },
-                { name: "Codex", version: "2.731.944", status: "down", link: "https://codex.lol", unc: "98%", sunc: "96%", price: "Free", platform: "Android", robloxVer: "2.731.944" },
-            ],
-            iosExploits: [
-                { name: "Delta", version: "2.729.838", status: "working", link: "https://deltaexploits.gg", unc: "99%", sunc: "98%", price: "Free", platform: "iOS", robloxVer: "2.729.838" }
-            ],
-            windowsExternals: [
-                { name: "Matcha", version: "v2", status: "working", link: "https://bitbyform.mysellauth.com", unc: "0%", sunc: "0%", price: "Paid", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Madius", version: "1.11.0-beta", status: "working", link: "https://madius.dev", unc: "0%", sunc: "0%", price: "free", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" }
-                { name: "Severe", version: "v2", status: "working", link: "https://bitbyform.mysellauth.com", unc: "0%", sunc: "0%", price: "Paid", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Lumen", version: "1.0.9", status: "working", link: "https://bitbyform.mysellauth.com", unc: "0%", sunc: "0%", price: "Paid", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Matrix Hub", version: "v2", status: "working", link: "https://bitbyform.mysellauth.com", unc: "0%", sunc: "0%", price: "Paid", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Photon", version: "6.8", status: "working", link: "https://bitbyform.mysellauth.com", unc: "0%", sunc: "0%", price: "Paid", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Axis", version: "0.4.5-04ccd36d694eb92d", status: "working", link: "https://bitbyform.mysellauth.com", unc: "0%", sunc: "0%", price: "Paid", platform: "Windows", robloxVer: "version-c5aecda2245e4fae" },
-                { name: "Melatonin", version: "1.4.4l", status: "down", link: "#", unc: "0%", sunc: "0%", price: "Paid", platform: "Windows", robloxVer: "version-e7d81637d42c4b23" },
-                { name: "Ronin", version: "Version-4.1.9", status: "down", link: "#", unc: "0%", sunc: "0%", price: "Paid", platform: "Windows", robloxVer: "version-ddf602d9cfe44005" },
-                { name: "Serotonin", version: "v2", status: "down", link: "https://bitbyform.mysellauth.com", unc: "0%", sunc: "0%", price: "Paid", platform: "Windows", robloxVer: "version-e7d81637d42c4b23" },
-                { name: "DX9WARE V2", version: "1.1.218", status: "down", link: "https://bitbyform.mysellauth.com", unc: "0%", sunc: "0%", price: "Paid", platform: "Windows", robloxVer: "version-e7d81637d42c4b23" }
-            ]
-        };
-        
-        let currentFilter = 'all';
-        let chatMessages = [];
-        const forbiddenWords = ['게이', '니엄마', '느금마', '병신', '새끼', '개새끼', '시병', 'ㅅㅂ', 'ㅂㅅ', '히틀러', '시발'];
-        
-        function filterMessage(text) {
-            for (let word of forbiddenWords) {
-                if (text.includes(word)) {
-                    return "####검열돰####";
-                }
-            }
-            return text;
-        }
+    sections.forEach(section => {
+        const element = document.getElementById(`sec-${section}`);
+        if (!element) return;
+        element.style.display =
+            filterKey === "all" || filterKey === section ? "block" : "none";
+    });
+}
 
-        function setFilter(filterKey) {
-            currentFilter = filterKey;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800";
-            });
-            const activeBtn = document.getElementById(`btn-${filterKey}`);
-            if (activeBtn) {
-                activeBtn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-indigo-600 text-white shadow-lg shadow-indigo-600/20";
-            }
-            const sections = ['windowsExploits', 'macExploits', 'androidExploits', 'iosExploits', 'windowsExternals'];
-            sections.forEach(sec => {
-                const el = document.getElementById(`sec-${sec}`);
-                if (!el) return;
-                if (filterKey === 'all' || filterKey === sec) {
-                    el.style.display = 'block';
-                } else {
-                    el.style.display = 'none';
-                }
-            });
-        }
+document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => setFilter(btn.dataset.filter));
+});
 
-        function renderChat() {
-            const container = document.getElementById('chat-messages');
-            if (chatMessages.length === 0) {
-                container.className = "flex-1 overflow-y-auto space-y-2.5 pr-1 mb-3 scrollbar-thin flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 text-xs";
-                container.innerHTML = `
-                    <p>No messages yet.</p>
-                    <p class="text-[11px]">Be the first to send a message!</p>
-                `;
-                return;
-            }
-            container.className = "flex-1 overflow-y-auto space-y-2.5 pr-1 mb-3 scrollbar-thin flex flex-col justify-start";
-            container.innerHTML = chatMessages.map(msg => `
-                <div class="bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 rounded-xl p-2.5 text-xs font-mono shadow-sm">
-                    <div class="flex items-center justify-between text-[11px] mb-1">
-                        <span class="text-pink-600 dark:text-pink-400 font-bold">Lv.${msg.level} · ${msg.user}</span>
-                        <span class="text-slate-400 dark:text-slate-500">${msg.time}</span>
-                    </div>
-                    <div class="text-slate-800 dark:text-slate-200 break-words">${msg.text}</div>
+/* -----------------------------
+   Cards
+----------------------------- */
+function toggleStatus(category, index) {
+    const item = data[category]?.[index];
+    if (!item) return;
+
+    item.status = item.status === "working" ? "down" : "working";
+    initDashboard();
+}
+
+function renderCards(containerId, items, categoryKey) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (!items.length) {
+        container.innerHTML =
+            '<div class="col-span-full text-xs text-slate-400 py-4 text-center">No items available.</div>';
+        return;
+    }
+
+    container.innerHTML = items.map((item, index) => {
+        const isWorking = item.status === "working";
+
+        const badgeClass = isWorking
+            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+            : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20";
+
+        const priceClass =
+            item.price?.toLowerCase() === "free"
+                ? "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20"
+                : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20";
+
+        const safeName = escapeHTML(item.name);
+        const safeVersion = escapeHTML(item.version);
+        const safePlatform = escapeHTML(item.platform);
+        const safeRobloxVer = escapeHTML(item.robloxVer);
+        const safePrice = escapeHTML(item.price || "N/A");
+
+        const details = `
+            <div class="mt-2.5 space-y-1 text-[11px] font-mono
+                        bg-slate-100 dark:bg-slate-950 p-2.5 rounded-lg
+                        border border-slate-200 dark:border-slate-800
+                        text-slate-600 dark:text-slate-300">
+                <div>
+                    <span class="text-slate-400 dark:text-slate-500">Platform:</span>
+                    <span class="text-slate-900 dark:text-white">${safePlatform}</span>
                 </div>
-            `).join('');
-            container.scrollTop = container.scrollHeight;
-        }
+                <div>
+                    <span class="text-slate-400 dark:text-slate-500">Roblox Version:</span>
+                    <span class="text-indigo-600 dark:text-indigo-300">${safeRobloxVer}</span>
+                </div>
+            </div>
+        `;
 
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const nickInput = document.getElementById('chat-nickname');
-            const rawText = input.value.trim();
-            if (!rawText) return;
-            const user = nickInput.value.trim() || 'Anonymous';
-            const now = new Date();
-            const timeStr = now.toISOString().replace('T', ' ').substring(0, 19);
-            const filteredText = filterMessage(rawText);
-            chatMessages.push({
-                level: 1,
-                user: user,
-                time: timeStr,
-                text: filteredText
-            });
-            input.value = '';
-            renderChat();
-        }
+        const unc =
+            item.unc !== undefined && item.sunc !== undefined
+                ? `
+                    <div class="mt-2 flex flex-wrap items-center gap-2 text-xs font-mono">
+                        <span class="bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-300
+                                     px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800">
+                            UNC: <strong>${escapeHTML(item.unc)}</strong>
+                        </span>
+                        <span class="bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-300
+                                     px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800">
+                            SUNC: <strong>${escapeHTML(item.sunc)}</strong>
+                        </span>
+                    </div>
+                `
+                : "";
 
-        function toggleStatus(category, index) {
-            data[category][index].status = data[category][index].status === 'working' ? 'down' : 'working';
-            initDashboard();
-        }
+        const hasWebsite = item.link && item.link !== "#";
+        const website = hasWebsite
+            ? `
+                <a href="${escapeHTML(item.link)}"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline
+                          flex items-center gap-1">
+                    Website
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                </a>
+              `
+            : `<span class="text-xs font-semibold text-slate-400 dark:text-slate-500">No Website</span>`;
 
-        function renderCards(containerId, items, categoryKey) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            if (items.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-xs text-slate-400 dark:text-slate-500 py-4 text-center">No items available.</div>`;
-                return;
-            }
-            container.innerHTML = items.map((item, index) => {
-                const isWorking = item.status === 'working';
-                const badgeClass = isWorking 
-                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20' 
-                    : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20 animate-pulse';
-                const statusText = isWorking ? 'Working' : 'Down';
-                
-                // 가격이 표시 안되어있으면 N/A 처리
-                const isFree = item.price === 'Free';
-                const priceBadgeClass = isFree
-                    ? 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20'
-                    : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20';
-                const priceText = item.price || 'N/A';
-
-                let detailsHtml = '';
-                if (item.platform || item.robloxVer || item.updateTime) {
-                    detailsHtml += `<div class="mt-2.5 space-y-1 text-[11px] font-mono bg-slate-100 dark:bg-slate-950 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300">`;
-                    if (item.platform) detailsHtml += `<div><span class="text-slate-400 dark:text-slate-500">Platform:</span> <span class="text-slate-900 dark:text-white">${item.platform}</span></div>`;
-                    if (item.robloxVer) detailsHtml += `<div><span class="text-slate-400 dark:text-slate-500">Roblox Version:</span> <span class="text-indigo-600 dark:text-indigo-300">${item.robloxVer}</span></div>`;
-                    if (item.updateTime) detailsHtml += `<div><span class="text-slate-400 dark:text-slate-500">Updated:</span> <span class="text-slate-500 dark:text-slate-400">${item.updateTime}</span></div>`;
-                    detailsHtml += `</div>`;
-                }
-                
-                let uncHtml = '';
-                if (item.unc !== undefined && item.sunc !== undefined) {
-                    uncHtml = `
-                        <div class="mt-2 flex items-center gap-2 text-xs font-mono">
-                            <span class="bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800">UNC: <strong>${item.unc}</strong></span>
-                            <span class="bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800">SUNC: <strong>${item.sunc}</strong></span>
+        return `
+            <article class="bg-white dark:bg-slate-900 border border-slate-200
+                            dark:border-slate-800 rounded-xl p-4 flex flex-col
+                            justify-between shadow-sm card-hover">
+                <div>
+                    <div class="flex items-start justify-between gap-2 mb-2">
+                        <div class="min-w-0">
+                            <h3 class="font-bold text-slate-900 dark:text-white text-base break-words">
+                                ${safeName}
+                            </h3>
+                            <span class="text-[11px] font-mono text-slate-400 dark:text-slate-500">
+                                v${safeVersion}
+                            </span>
                         </div>
-                    `;
-                }
 
-                const linkHtml = (item.link && item.link !== "#") 
-                    ? `<a href="${item.link}" target="_blank" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"><span>Website</span> <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>` 
-                    : `<span class="text-xs font-semibold text-slate-400 dark:text-slate-500 flex items-center gap-1">No Website</span>`;
-
-                return `
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex flex-col justify-between shadow-sm hover:border-indigo-500/50 transition">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-2">
-                                    <h3 class="font-bold text-slate-900 dark:text-white text-base">${item.name}</h3>
-                                    <span class="text-[11px] font-mono text-slate-400 dark:text-slate-500">v${item.version}</span>
-                                </div>
-                                <div class="flex items-center gap-1.5">
-                                    ${item.price ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${priceBadgeClass}">${priceText}</span>` : ''}
-                                    <button onclick="toggleStatus('${categoryKey}', ${index})" class="text-[10px] font-bold px-2.5 py-1 rounded-full border ${badgeClass} cursor-pointer hover:opacity-80 transition">${statusText}</button>
-                                </div>
-                            </div>
-                            ${uncHtml}
-                            ${detailsHtml}
-                        </div>
-                        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
-                            ${linkHtml}
+                        <div class="flex flex-wrap justify-end items-center gap-1.5 shrink-0">
+                            ${item.price
+                                ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${priceClass}">
+                                       ${safePrice}
+                                   </span>`
+                                : ""}
+                            <button type="button"
+                                    class="status-btn text-[10px] font-bold px-2.5 py-1 rounded-full
+                                           border ${badgeClass} hover:opacity-80 transition"
+                                    data-category="${escapeHTML(categoryKey)}"
+                                    data-index="${index}">
+                                ${isWorking ? "Working" : "Down"}
+                            </button>
                         </div>
                     </div>
-                `;
-            }).join('');
-        }
 
-        function initDashboard() {
-            renderCards('windows-exploits', data.windowsExploits, 'windowsExploits');
-            renderCards('mac-exploits', data.macExploits, 'macExploits');
-            renderCards('android-exploits', data.androidExploits, 'androidExploits');
-            renderCards('ios-exploits', data.iosExploits, 'iosExploits');
-            renderCards('windows-externals', data.windowsExternals, 'windowsExternals');
-        }
+                    ${unc}
+                    ${details}
+                </div>
 
-        initDashboard();
-        setFilter('all');
-    </script>
+                <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                    ${website}
+                </div>
+            </article>
+        `;
+    }).join("");
+
+    container.querySelectorAll(".status-btn").forEach(button => {
+        button.addEventListener("click", () => {
+            toggleStatus(button.dataset.category, Number(button.dataset.index));
+        });
+    });
+}
+
+function initDashboard() {
+    renderCards("windows-exploits", data.windowsExploits, "windowsExploits");
+    renderCards("mac-exploits", data.macExploits, "macExploits");
+    renderCards("android-exploits", data.androidExploits, "androidExploits");
+    renderCards("ios-exploits", data.iosExploits, "iosExploits");
+    renderCards("windows-externals", data.windowsExternals, "windowsExternals");
+}
+
+/* -----------------------------
+   Chat
+----------------------------- */
+let chatMessages = [];
+
+function renderChat() {
+    const container = document.getElementById("chat-messages");
+
+    if (chatMessages.length === 0) {
+        container.className =
+            "flex-1 overflow-y-auto space-y-2.5 pr-1 mb-3 chat-scroll " +
+            "flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 text-xs";
+
+        container.innerHTML = `
+            <p>No messages yet.</p>
+            <p class="text-[11px]">Be the first to send a message!</p>
+        `;
+        return;
+    }
+
+    container.className =
+        "flex-1 overflow-y-auto space-y-2.5 pr-1 mb-3 chat-scroll";
+
+    container.innerHTML = chatMessages.map(msg => `
+        <div class="bg-slate-100 dark:bg-slate-950 border border-slate-200
+                    dark:border-slate-800/80 rounded-xl p-2.5 text-xs shadow-sm">
+            <div class="flex items-center justify-between gap-2 text-[11px] mb-1">
+                <span class="text-pink-600 dark:text-pink-400 font-bold break-words">
+                    Lv.${escapeHTML(msg.level)} · ${escapeHTML(msg.user)}
+                </span>
+                <span class="text-slate-400 dark:text-slate-500 shrink-0">
+                    ${escapeHTML(msg.time)}
+                </span>
+            </div>
+            <div class="text-slate-800 dark:text-slate-200 break-words">
+                ${escapeHTML(msg.text)}
+            </div>
+        </div>
+    `).join("");
+
+    container.scrollTop = container.scrollHeight;
+}
+
+function sendMessage() {
+    const input = document.getElementById("chat-input");
+    const nickInput = document.getElementById("chat-nickname");
+
+    const rawText = input.value.trim();
+    if (!rawText) return;
+
+    const user = nickInput.value.trim() || "Anonymous";
+    const filteredText = filterMessage(rawText);
+
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString("ko-KR", {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+
+    chatMessages.push({
+        level: 1,
+        user: user.slice(0, 15),
+        time: timeStr,
+        text: filteredText.slice(0, 100)
+    });
+
+    input.value = "";
+    renderChat();
+}
+
+document.getElementById("send-btn").addEventListener("click", sendMessage);
+
+document.getElementById("chat-input").addEventListener("keydown", event => {
+    if (event.key === "Enter") sendMessage();
+});
+
+/* -----------------------------
+   Start
+----------------------------- */
+initDashboard();
+setFilter("all");
+renderChat();
+</script>
+
 </body>
 </html>
