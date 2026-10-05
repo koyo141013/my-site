@@ -205,6 +205,7 @@
 
                 </h2>
 
+
                 <!-- MacSploit Update -->
                 <div class="update-notice
                             bg-white dark:bg-slate-900
@@ -231,9 +232,7 @@
                             <h3 class="text-lg font-bold
                                        text-slate-900 dark:text-white
                                        mb-2">
-
                                 An exploit update has been detected!
-
                             </h3>
 
                             <p class="text-sm
@@ -335,6 +334,7 @@
 
                 </div>
 
+
                 <!-- Velocity Update -->
                 <div class="update-notice
                             bg-white dark:bg-slate-900
@@ -361,9 +361,7 @@
                             <h3 class="text-lg font-bold
                                        text-slate-900 dark:text-white
                                        mb-2">
-
                                 An exploit update has been detected!
-
                             </h3>
 
                             <p class="text-sm
@@ -490,9 +488,7 @@ Completely removed the AVX2 Instruction set from the module and injector which s
                                text-emerald-600
                                dark:text-emerald-400
                                text-xl font-bold mb-4">
-
                         Windows Exploits
-
                     </h2>
 
                     <div id="windows-exploits"
@@ -510,9 +506,7 @@ Completely removed the AVX2 Instruction set from the module and injector which s
                                text-sky-600
                                dark:text-sky-400
                                text-xl font-bold mb-4">
-
                         Mac Exploits
-
                     </h2>
 
                     <div id="mac-exploits"
@@ -530,9 +524,7 @@ Completely removed the AVX2 Instruction set from the module and injector which s
                                text-amber-600
                                dark:text-amber-400
                                text-xl font-bold mb-4">
-
                         Android Exploits
-
                     </h2>
 
                     <div id="android-exploits"
@@ -550,9 +542,7 @@ Completely removed the AVX2 Instruction set from the module and injector which s
                                text-pink-600
                                dark:text-pink-400
                                text-xl font-bold mb-4">
-
                         iOS Exploits
-
                     </h2>
 
                     <div id="ios-exploits"
@@ -570,9 +560,7 @@ Completely removed the AVX2 Instruction set from the module and injector which s
                                text-purple-600
                                dark:text-purple-400
                                text-xl font-bold mb-4">
-
                         Windows Externals
-
                     </h2>
 
                     <div id="windows-externals"
@@ -605,18 +593,14 @@ Completely removed the AVX2 Instruction set from the module and injector which s
 
                         <h2 class="text-base font-bold
                                    text-slate-900 dark:text-white">
-
                             Live Chat
-
                         </h2>
 
                         <p class="text-xs
                                   text-indigo-600
                                   dark:text-indigo-400
                                   font-medium">
-
                             HUB Lounge
-
                         </p>
 
                     </div>
@@ -625,9 +609,7 @@ Completely removed the AVX2 Instruction set from the module and injector which s
                                  text-emerald-600
                                  dark:text-emerald-400
                                  font-medium">
-
                         Connected
-
                     </span>
 
                 </div>
@@ -649,9 +631,7 @@ Completely removed the AVX2 Instruction set from the module and injector which s
 
                         <span class="text-slate-700
                                      dark:text-slate-300">
-
                             Online
-
                         </span>
 
                     </div>
@@ -661,9 +641,7 @@ Completely removed the AVX2 Instruction set from the module and injector which s
                                  text-slate-900 dark:text-white
                                  bg-slate-200 dark:bg-slate-800
                                  px-2 py-0.5 rounded-full">
-
                         1
-
                     </span>
 
                 </div>
@@ -699,7 +677,6 @@ Completely removed the AVX2 Instruction set from the module and injector which s
                                   focus:outline-none
                                   focus:border-indigo-500">
 
-
                     <div class="flex gap-2">
 
                         <input type="text"
@@ -724,9 +701,7 @@ Completely removed the AVX2 Instruction set from the module and injector which s
                                        text-white font-bold
                                        px-4 py-2 rounded-xl
                                        text-xs transition">
-
                             Send
-
                         </button>
 
                     </div>
@@ -800,6 +775,18 @@ const data = {
             unc: "99%",
             sunc: "100%",
             price: "Paid",
+            platform: "Windows",
+            robloxVer: "version-02c37bc51a384b8f"
+        },
+
+        {
+            name: "Nexomia",
+            version: "v0.4.4",
+            status: "working",
+            link: "https://nexomia.win/download",
+            unc: "99%",
+            sunc: "100%",
+            price: "Free",
             platform: "Windows",
             robloxVer: "version-02c37bc51a384b8f"
         },
@@ -1382,15 +1369,26 @@ function renderCards(
     }
 
 
-    // Working items are always shown first, followed by down items.
-    // Keep the original data index so the status toggle still targets the correct item.
     const sortedItems = items
-        .map((item, originalIndex) => ({ item, originalIndex }))
+        .map((item, originalIndex) => ({
+            item,
+            originalIndex
+        }))
         .sort((a, b) => {
-            const aWorking = a.item.status === "working" ? 0 : 1;
-            const bWorking = b.item.status === "working" ? 0 : 1;
+
+            const aWorking =
+                a.item.status === "working"
+                    ? 0
+                    : 1;
+
+            const bWorking =
+                b.item.status === "working"
+                    ? 0
+                    : 1;
+
             return aWorking - bWorking;
         });
+
 
     container.innerHTML =
         sortedItems.map(({ item, originalIndex }) => {
